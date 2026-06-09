@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Birthday Quest</title>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+}
+
+.background{
+    width:100vw;
+    height:100vh;
+    object-fit:cover;
+}
+
+/* Invisible button over "YES" */
+#yesButton{
+    position:absolute;
+
+    left:40%;
+    top:82%;
+
+    width:250px;
+    height:80px;
+
+    background:transparent;
+    border:none;
+
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<img class="background" src="welcome.png">
+
+<button id="yesButton"></button>
+
+<script>
+
+document.getElementById("yesButton").onclick = function(){
+
+    window.location.href = "pin.html";
+
+};
+
+</script>
+
+</body>
+</html>
