@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PIN</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: black;
+        overflow: hidden;
+        font-family: Arial;
+    }
+
+    #bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    /* PIN display on your image */
+    #pin {
+        position: absolute;
+        width: 100%;
+        top: 45%;
+        text-align: center;
+        font-size: 40px;
+        letter-spacing: 15px;
+        color: white;
+        font-family: monospace;
+        z-index: 2;
+    }
+
+    /* SUCCESS MESSAGE */
+    #success {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        color: white;
+        display: none;
+        font-size: 32px;
+        font-weight: bold;
+        z-index: 4;
+        text-shadow: 0 0 10px black;
+    }
+
+    /* ERROR MESSAGE */
+    #error {
+        position: absolute;
+        top: 55%;
+        width: 100%;
+        text-align: center;
+        color: red;
+        font-size: 28px;
+        font-weight: bold;
+        display: none;
+        z-index: 5;
+        text-shadow: 0 0 10px black;
+    }
+
+    /* hidden input */
+    #input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    /* shake animation */
+    .shake {
+        animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        50% { transform: translateX(10px); }
+        75% { transform: translateX(-10px); }
+        100% { transform: translateX(0); }
+    }
+</style>
+</head>
+
+<body>
+
+<img id="bg" src="../../Desktop/birthday_quest/pin.png">
+
+<div id="pin">_ _ _ _ _ _ _ _</div>
+
+<div id="success">
+    <div>ACCES GRANTED</div>
+    <div style="font-size:20px;">DAY 1/5 COMPLETED</div>
+    <div style="font-size:20px;">HIDDEN WORD: TAMO</div>
+</div>
+
+<div id="error">TRY AGAIN</div>
+
+<input id="input" autofocus>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const input = document.getElementById("input");
+const pinDisplay = document.getElementById("pin");
+const success = document.getElementById("success");
+const error = document.getElementById("error");
+
+const code = "09092024";
+let value = "";
+
+// force focus always
+setInterval(() => input.focus(), 100);
+
+input.addEventListener("input", () => {
+
+    value = input.value.replace(/\D/g, "").slice(0, 8);
+    input.value = value;
+
+    updateDisplay();
+    error.style.display = "none";
+
+    if (value.length === 8) {
+        if (value === code) {
+            unlock();
+        } else {
+            wrong();
+        }
+    }
+});
+
+function updateDisplay() {
+    let output = "";
+
+    for (let i = 0; i < 8; i++) {
+        output += (value[i] ? value[i] : "_") + " ";
+    }
+
+    pinDisplay.textContent = output.trim();
+}
+
+function unlock() {
+    success.style.display = "block";
+
+    let end = Date.now() + 3000;
+
+    (function frame() {
+        confetti({
+            particleCount: 8,
+            spread: 90,
+            origin: { y: 0.6 }
+        });
+
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    })();
+}
+
+function wrong() {
+    error.style.display = "block";
+
+    document.body.classList.add("shake");
+
+    setTimeout(() => {
+        document.body.classList.remove("shake");
+        input.value = "";
+        value = "";
+        updateDisplay();
+        error.style.display = "none";
+    }, 1200);
+}
+
+updateDisplay();
+</script>
+
+</body>
+</html>
